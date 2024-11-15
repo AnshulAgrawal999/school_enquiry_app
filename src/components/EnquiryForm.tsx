@@ -15,8 +15,8 @@ type EnquiryFormData = {
     guardianPhoneNumber : string  ;
     guardianMobileNumberOpt : string  ;
     studentName: string  ;
-    dateOfBirth: Date  ;
     class: string  ;
+    dateOfBirth: Date  ;
     currentSchool: string  ;
     address: {
       street: string  ;
@@ -72,17 +72,15 @@ export default function EnquiryForm() {
 
   const { register , control , handleSubmit , formState , reset } = form  ;  
 
-  const { errors , isSubmitting } = formState  ;
+  const { errors } = formState  ;
 
   const onSubmit = ( data : EnquiryFormData ) => {
 
-    console.log( 'form submitted' , data )  ;
-
-    reset()  ;
+    console.log( 'form submitted' , data )  ;   
   }
 
   const handleResetForm = ( ) => {
-    reset()  ;  
+    reset( )  ;  
   }
 
   return (
@@ -105,7 +103,7 @@ export default function EnquiryForm() {
                   message : 'Guardian Name is required'
                 }  } )  } />
 
-              <p> { errors.guardianName?.message && !isSubmitting } </p>
+              <p> { errors.guardianName?.message  } </p>
             </div>
 
             <div>
@@ -122,7 +120,7 @@ export default function EnquiryForm() {
                 }  } ) }
               />
 
-              <p> { errors.relation?.message && !isSubmitting } </p>
+              <p> { errors.relation?.message  } </p>
             </div>
 
             <div>
@@ -138,7 +136,7 @@ export default function EnquiryForm() {
                 }
                } ) } />
 
-               <p> { errors.guardianEmail?.message && !isSubmitting } </p>
+               <p> { errors.guardianEmail?.message  } </p>
             </div>
 
             <div>
@@ -160,7 +158,7 @@ export default function EnquiryForm() {
                   }, } ) }
               />
 
-              <p> { errors.guardianPhoneNumber?.message && !isSubmitting } </p>
+              <p> { errors.guardianPhoneNumber?.message  } </p>
             </div>
 
             <div>
@@ -180,7 +178,7 @@ export default function EnquiryForm() {
                 } ) }
               />
 
-              <p> { errors.guardianMobileNumberOpt?.message && !isSubmitting } </p>
+              <p> { errors.guardianMobileNumberOpt?.message  } </p>
             </div>
 
           </div>
@@ -198,33 +196,20 @@ export default function EnquiryForm() {
                   message : 'Student Name is required'
                 }  } )  } />
 
-              <p> { errors.dateOfBirth?.message && !isSubmitting } </p>
+              <p> { errors.studentName?.message  } </p>
 
             </div>
 
             <div>
 
-              <label htmlFor="studentName"> Student Name </label>
-              <input type="text" id="studentName" { ...register( 'studentName' , { 
+              <label htmlFor="class"> Class </label>
+              <input type="text" id="class" { ...register( 'class' , { 
                   required : { 
                   value : true ,
-                  message : 'Student Name is required'
+                  message : 'Class is required'
                 }  } )  } />
 
-              <p> { errors.dateOfBirth?.message && !isSubmitting } </p>
-
-            </div>
-
-            <div>
-              
-              <label htmlFor="studentName"> Student Name </label>
-              <input type="text" id="studentName" { ...register( 'studentName' , { 
-                  required : { 
-                  value : true ,
-                  message : 'Student Name is required'
-                }  } )  } />
-
-              <p> { errors.dateOfBirth?.message && !isSubmitting } </p>
+              <p> { errors.class?.message  } </p>
 
             </div>
 
@@ -238,19 +223,35 @@ export default function EnquiryForm() {
                   message : 'Date Of Birth is required'
                 }  } )  } />
 
-              <p> { errors.dateOfBirth?.message && !isSubmitting } </p>
+              <p> { errors.dateOfBirth?.message  } </p>
             
             </div>
 
+            <div>
+              
+              <label htmlFor="currentSchool"> Current School </label>
+              <input type="text" id="currentSchool" { ...register( 'currentSchool' , { 
+                  required : { 
+                  value : true ,
+                  message : 'Current School is required'
+                }  } )  } />
+
+              <p> { errors.currentSchool?.message  } </p>
+
+            </div>
 
           </div>
 
+          <h2> Address </h2>
 
-                <div>
-                  <button type="submit"> submit form </button>
-                  
-                  <button onClick={handleResetForm} > reset form </button>
-                </div>
+          
+
+            <div>
+                
+                <button type="submit"> submit form </button>
+
+                <button type="button" onClick={ handleResetForm } > reset form </button>
+            </div>
                 
         </form>
         
