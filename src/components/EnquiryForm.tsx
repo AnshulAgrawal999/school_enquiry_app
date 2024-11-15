@@ -105,7 +105,7 @@ export default function EnquiryForm() {
                   message : 'Guardian Name is required'
                 }  } )  } />
 
-              <p> { errors.guardianName?.message } </p>
+              <p> { errors.guardianName?.message && !isSubmitting } </p>
             </div>
 
             <div>
@@ -122,7 +122,7 @@ export default function EnquiryForm() {
                 }  } ) }
               />
 
-              <p> { errors.relation?.message } </p>
+              <p> { errors.relation?.message && !isSubmitting } </p>
             </div>
 
             <div>
@@ -138,7 +138,7 @@ export default function EnquiryForm() {
                 }
                } ) } />
 
-               <p> { errors.guardianEmail?.message } </p>
+               <p> { errors.guardianEmail?.message && !isSubmitting } </p>
             </div>
 
             <div>
@@ -160,7 +160,7 @@ export default function EnquiryForm() {
                   }, } ) }
               />
 
-              <p> { errors.guardianPhoneNumber?.message } </p>
+              <p> { errors.guardianPhoneNumber?.message && !isSubmitting } </p>
             </div>
 
             <div>
@@ -180,7 +180,7 @@ export default function EnquiryForm() {
                 } ) }
               />
 
-              <p> { errors.guardianMobileNumberOpt?.message } </p>
+              <p> { errors.guardianMobileNumberOpt?.message && !isSubmitting } </p>
             </div>
 
           </div>
@@ -191,6 +191,45 @@ export default function EnquiryForm() {
             
             <div>
 
+              <label htmlFor="studentName"> Student Name </label>
+              <input type="text" id="studentName" { ...register( 'studentName' , { 
+                  required : { 
+                  value : true ,
+                  message : 'Student Name is required'
+                }  } )  } />
+
+              <p> { errors.dateOfBirth?.message && !isSubmitting } </p>
+
+            </div>
+
+            <div>
+
+              <label htmlFor="studentName"> Student Name </label>
+              <input type="text" id="studentName" { ...register( 'studentName' , { 
+                  required : { 
+                  value : true ,
+                  message : 'Student Name is required'
+                }  } )  } />
+
+              <p> { errors.dateOfBirth?.message && !isSubmitting } </p>
+
+            </div>
+
+            <div>
+              
+              <label htmlFor="studentName"> Student Name </label>
+              <input type="text" id="studentName" { ...register( 'studentName' , { 
+                  required : { 
+                  value : true ,
+                  message : 'Student Name is required'
+                }  } )  } />
+
+              <p> { errors.dateOfBirth?.message && !isSubmitting } </p>
+
+            </div>
+
+            <div>
+
               <label htmlFor="dateOfBirth"> Date Of Birth </label>
               <input type="date" id="dateOfBirth" { ...register( 'dateOfBirth' , { 
                   valueAsDate : true ,
@@ -199,14 +238,20 @@ export default function EnquiryForm() {
                   message : 'Date Of Birth is required'
                 }  } )  } />
 
-              <p> { errors.dateOfBirth?.message } </p>
+              <p> { errors.dateOfBirth?.message && !isSubmitting } </p>
             
             </div>
-          </div>
-                <button type="submit"> submit form </button>
-                
-                <button type="submit" onClick={handleResetForm} > reset form </button>
 
+
+          </div>
+
+
+                <div>
+                  <button type="submit"> submit form </button>
+                  
+                  <button onClick={handleResetForm} > reset form </button>
+                </div>
+                
         </form>
         
         <DevTool control={control} />
