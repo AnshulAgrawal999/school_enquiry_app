@@ -22,7 +22,7 @@ type EnquiryFormData = {
       street: string  ;
       city: string  ;
       state: string  ;
-      pinCode: string  ;
+      pincode: string  ;
       country: string  ;
     }  ;
     enquirySource: string  ;
@@ -60,7 +60,7 @@ export default function EnquiryForm() {
           street: ""  ,
           city: ""  ,
           state: ""  ,
-          pinCode: ""  ,
+          pincode: ""  ,
           country: "India"  ,
         }  ,
         enquirySource: ""  ,
@@ -76,7 +76,9 @@ export default function EnquiryForm() {
 
   const onSubmit = ( data : EnquiryFormData ) => {
 
-    console.log( 'form submitted' , data )  ;   
+    alert( 'form submitted' )  ;
+
+    console.log(  data )  ;   
   }
 
   const handleResetForm = ( ) => {
@@ -244,7 +246,101 @@ export default function EnquiryForm() {
 
           <h2> Address </h2>
 
+          <div className="enqFields" >
+                 <div>
+
+              <label htmlFor="street"> Street </label>
+              <input type="text" id="street" { ...register( 'address.street' , { 
+                  required : { 
+                  value : true ,
+                  message : 'Street is required'
+                }  } )  } />
+
+              <p> { errors.address?.street?.message  } </p>
+
+            </div>
+
+            <div>
+
+              <label htmlFor="city"> City </label>
+              <input type="text" id="street" { ...register( 'address.city' , { 
+                  required : { 
+                  value : true ,
+                  message : 'City is required'
+                }  } )  } />
+
+              <p> { errors.address?.city?.message  } </p>
+
+            </div>
+
+            <div>
+            
+              <label htmlFor="state"> State </label>
+              <input type="text" id="state" { ...register( 'address.state' , { 
+                  required : { 
+                  value : true ,
+                  message : 'State is required'
+                }  } )  } />
+
+              <p> { errors.address?.state?.message  } </p>
+
+            </div>
+
+            <div>
+
+              <label htmlFor="pincode"> Pincode </label>
+              <input type="text" id="pincode" { ...register( 'address.pincode' , { 
+                  required : { 
+                  value : true ,
+                  message : 'Pincode is required'
+                }  } )  } />
+
+              <p> { errors.address?.pincode?.message  } </p>
+
+            </div>
+
+            <div>
+            
+              <label htmlFor="country"> Country </label>
+              <input type="text" id="country" { ...register( 'address.country' , { 
+                  required : { 
+                  value : true ,
+                  message : 'Country is required'
+                }  } )  } />
+
+              <p> { errors.address?.country?.message  } </p>
+
+            </div>
+          </div>
+
+          <h2> Enquiry </h2>
+
+          <div className="enqFields" >
+
+            <div>
+
+              <label htmlFor="enquirySource"> Enquiry Source </label>
+
+              <input type="text" id="enquirySource" { ...register( 'enquirySource' )  } />
+
+            </div>
+
+            <div>
+
+              <label htmlFor="description"> Description </label>
+        
+              <input type="text" id="description" { ...register( 'description' , { required : { 
+                  value : true ,
+                  message : 'Description is required'
+                }  } )  } />
+
+              <p> { errors.description?.message  } </p>
+            </div>
+
+          </div>
           
+          <label htmlFor="wantHostel"> Want Hostel </label>
+          <input type="checkbox" id="wantHostel" { ...register( 'wantHostel' )  } />
 
             <div>
                 
