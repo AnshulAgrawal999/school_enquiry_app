@@ -129,7 +129,7 @@ const EnquiriesTable : React.FC = () => {
       } 
       catch ( err: any ) 
       {
-
+  
         setError( err.message || 'Something went wrong' )  ;
 
       } 
@@ -190,26 +190,24 @@ const EnquiriesTable : React.FC = () => {
   
   
   const handleSave = async (updatedEnquiry: Enquiry) => {
-    const enrichedEnquiry = { ...updatedEnquiry, createdAt: selectedEnquiry?.createdAt || new Date().toISOString() };
-  
     try {
-      const response = await fetch(`http://localhost:4000/admin/${enrichedEnquiry._id}`, {
+      const response = await fetch(`http://localhost:4000/admin/${updatedEnquiry._id}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(enrichedEnquiry),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedEnquiry),
       });
   
-      if (!response.ok) throw new Error("Failed to update enquiry");
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error response:", errorData);
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
+      }
   
-      setEnquiries((prev) =>
-        prev.map((enquiry) => (enquiry._id === enrichedEnquiry._id ? enrichedEnquiry : enquiry))
-      );
-  
-      alert("Enquiry updated successfully!");
-    } catch (error: any) {
-      alert(error.message || "Something went wrong while updating");
-    } finally {
-      setIsModalOpen(false);
+      console.log("Update successful!");
+    } catch (error) {
+      console.error("Error saving enquiry:", error);
     }
   };
   
@@ -288,7 +286,7 @@ const EnquiriesTable : React.FC = () => {
 
                   </td>
 
-                  <td style={tdStyle}>{enquiry.description || 'Not Available' }</td>
+                  <td style={tdStyle}>{ enquiry.description }</td>
 
                   <td style={tdStyle}>{ enquiry.createdAt ? new Date(enquiry.createdAt).toLocaleString() : 'Not Available' }</td>
 

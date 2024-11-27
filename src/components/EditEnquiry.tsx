@@ -63,11 +63,6 @@ export const EditModal: React.FC<{
 
   useEffect(() => {
 
-
-  console.log('enquiry:', enquiry);
-
-  console.log('formData:', formData);
-
     if (enquiry) {
       setFormData({
         ...enquiry,
@@ -90,7 +85,7 @@ export const EditModal: React.FC<{
         enquirySource: enquiry.enquirySource || 'referral',
       });
     }
-  }, [enquiry ]);
+  }, [enquiry]);
   
   
   
@@ -124,7 +119,9 @@ export const EditModal: React.FC<{
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()  ;
+
+    console.log("Submitting data:", formData)  ;
   
     // Validation: Ensure fields aren't empty unless optional
     if (!formData.guardianName || !formData.studentName) {

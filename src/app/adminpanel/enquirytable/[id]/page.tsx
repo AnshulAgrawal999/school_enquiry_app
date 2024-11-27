@@ -240,7 +240,7 @@ export default function EnquiryDetailPage() {
           </p>
 
           <p style={fieldStyle}>
-            <strong>Description:</strong> {enquiry.description || "Not Available"}
+            <strong>Description:</strong> {enquiry.description }
           </p>
 
           <p style={fieldStyle}>
