@@ -181,49 +181,38 @@ const EnquiriesTable : React.FC = () => {
   };
   
 
-
-  const handleEdit = ( event : React.MouseEvent , enquiry: Enquiry ) => 
-  {
-    event.stopPropagation()  ; // Stop the click propagation to enquiry row
-
-    // Open the edit modal and set the current enquiry
-
-    setEditEnquiry( enquiry )  ;
-
-    setIsModalOpen( true )  ;
-
+  const handleEdit = (event: React.MouseEvent, enquiry: Enquiry) => {
+    event.stopPropagation(); // Stop the click propagation to enquiry row
+    setEditEnquiry(enquiry);
+    setSelectedEnquiry(enquiry); // Set the selected enquiry here
+    setIsModalOpen(true);
   };
   
-  const handleSave = async (updatedEnquiry: Enquiry) : Promise<void> => {
-    const enrichedEnquiry: Enquiry = {
-      ...updatedEnquiry,
-      createdAt: selectedEnquiry?.createdAt || new Date().toISOString(), // Include createdAt
-    };
   
-    fetch(`http://localhost:4000/admin/${enrichedEnquiry._id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(enrichedEnquiry),
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error("Failed to update enquiry");
-        return response.json();
-      })
-      .then(() => {
-        setEnquiries((prev) =>
-          prev.map((enquiry) =>
-            enquiry._id === enrichedEnquiry._id ? enrichedEnquiry : enquiry
-          )
-        );
-        alert("Enquiry updated successfully!");
-      })
-      .catch((err: any) => {
-        alert(err.message || "Something went wrong while updating");
-      })
-      .finally(() => {
-        setIsModalOpen(false);
+  const handleSave = async (updatedEnquiry: Enquiry) => {
+    const enrichedEnquiry = { ...updatedEnquiry, createdAt: selectedEnquiry?.createdAt || new Date().toISOString() };
+  
+    try {
+      const response = await fetch(`http://localhost:4000/admin/${enrichedEnquiry._id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(enrichedEnquiry),
       });
+  
+      if (!response.ok) throw new Error("Failed to update enquiry");
+  
+      setEnquiries((prev) =>
+        prev.map((enquiry) => (enquiry._id === enrichedEnquiry._id ? enrichedEnquiry : enquiry))
+      );
+  
+      alert("Enquiry updated successfully!");
+    } catch (error: any) {
+      alert(error.message || "Something went wrong while updating");
+    } finally {
+      setIsModalOpen(false);
+    }
   };
+  
   
   
 
@@ -269,7 +258,7 @@ const EnquiriesTable : React.FC = () => {
             { enquiries.map( ( enquiry , index ) => (
                 
                 <tr
-                  key={index}
+                  key={ enquiry._id }
                   style={trStyle}
                   onMouseEnter={handleRowHover}
                   onMouseLeave={handleRowLeave}
@@ -332,7 +321,12 @@ const EnquiriesTable : React.FC = () => {
 
           </table>
 
-          <EditModal isOpen={ isModalOpen } enquiry={ selectedEnquiry! } onClose={ () => setIsModalOpen( false ) } onSave={ handleSave }  />
+          <EditModal
+  isOpen={isModalOpen}
+  enquiry={selectedEnquiry} // Pass directly; don't force non-null
+  onClose={() => setIsModalOpen(false)}
+  onSave={handleSave}
+/>
 
 
           <div style={paginationStyle}>

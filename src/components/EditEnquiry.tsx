@@ -63,21 +63,36 @@ export const EditModal: React.FC<{
 
   useEffect(() => {
 
-    console.log( enquiry )  ;
-    
+
+  console.log('enquiry:', enquiry);
+
+  console.log('formData:', formData);
+
     if (enquiry) {
       setFormData({
         ...enquiry,
+        guardianName: enquiry.guardianName || '',
+        guardianEmail: enquiry.guardianEmail || '',
+        guardianPhoneNumber: enquiry.guardianPhoneNumber || '',
+        guardianMobileNumberOpt: enquiry.guardianMobileNumberOpt || '',
+        studentName: enquiry.studentName || '',
+        dateOfBirth: enquiry.dateOfBirth || '',
+        currentSchool: enquiry.currentSchool || '',
+        lastYearGrade: enquiry.lastYearGrade || 'not applicable',
         address: {
-          street: enquiry.address.street || '',
-          city: enquiry.address.city || '',
-          state: enquiry.address.state || '',
-          pincode: enquiry.address.pincode || '',
-          country: enquiry.address.country || 'India',
+          street: enquiry.address?.street || '',
+          city: enquiry.address?.city || '',
+          state: enquiry.address?.state || '',
+          pincode: enquiry.address?.pincode || '',
+          country: enquiry.address?.country || 'India',
         },
+        description: enquiry.description || '',
+        enquirySource: enquiry.enquirySource || 'referral',
       });
     }
-  }, [enquiry]);
+  }, [enquiry ]);
+  
+  
   
 
   const handleChange = (
@@ -110,8 +125,16 @@ export const EditModal: React.FC<{
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+  
+    // Validation: Ensure fields aren't empty unless optional
+    if (!formData.guardianName || !formData.studentName) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+  
     onSave(formData);
   };
+  
 
   if (!isOpen) return null;
 
@@ -120,15 +143,17 @@ export const EditModal: React.FC<{
       <div style={modalStyle}>
         <h2>Edit Enquiry</h2>
         <form onSubmit={handleSubmit} style={formStyle}>
+
           {/* Guardian Info */}
           <label style={labelStyle}>Guardian Name</label>
           <input
             type="text"
             name="guardianName"
-            value={formData.guardianName}
+            value={formData.guardianName || '' }
             onChange={handleChange}
             style={inputStyle}
           />
+
           <label style={labelStyle}>Relation</label>
           <select
             name="relation"
