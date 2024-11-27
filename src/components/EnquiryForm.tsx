@@ -67,7 +67,7 @@ const DevTool: React.ComponentType<DevToolProps> = dynamic(
 
     () => import( "@hookform/devtools" ).then( ( module ) => module.DevTool ) ,
 
-    { ssr: false } ,
+    { ssr: false } 
 
 );
 

@@ -27,7 +27,7 @@ const Navbar: React.FC = () => {
       router.push( '/adminpanel/login' )  ;
     }
 
-  } , [ isLoggedIn ] )  ;
+  } , [ isLoggedIn , router ] )  ;
 
 
   const handleLogin = () => 
