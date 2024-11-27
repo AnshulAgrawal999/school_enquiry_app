@@ -14,9 +14,13 @@ const Navbar: React.FC = () => {
 
   const router = useRouter()  ;
 
+  const [ adminName , setAdminName ] = useState < string | null > (  "" )  ;
+
   useEffect( () => {
     
     const token = localStorage.getItem( 'token' )  ;
+
+    setAdminName( localStorage.getItem( 'adminName' ) )  ;
 
     if( token )
     { 
@@ -80,7 +84,7 @@ const Navbar: React.FC = () => {
       <div style={ styles.navContainer } >  
 
         <div style={ styles.menu } >
-          { localStorage.getItem( "adminName" ) }
+          {  adminName }
         </div>
 
         <div style={ styles.menu } >
