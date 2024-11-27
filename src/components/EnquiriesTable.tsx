@@ -201,7 +201,7 @@ const EnquiriesTable : React.FC = () => {
     };
   
     fetch(`http://localhost:4000/admin/${enrichedEnquiry._id}`, {
-      method: "PUT",
+      method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(enrichedEnquiry),
     })

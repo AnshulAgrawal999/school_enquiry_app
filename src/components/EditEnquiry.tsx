@@ -62,6 +62,9 @@ export const EditModal: React.FC<{
   
 
   useEffect(() => {
+
+    console.log( enquiry )  ;
+    
     if (enquiry) {
       setFormData({
         ...enquiry,
