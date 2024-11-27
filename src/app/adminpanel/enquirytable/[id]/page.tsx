@@ -240,15 +240,15 @@ export default function EnquiryDetailPage() {
           </p>
 
           <p style={fieldStyle}>
-            <strong>Description:</strong> {enquiry.description || "N/A"}
+            <strong>Description:</strong> {enquiry.description || "Not Available"}
           </p>
 
           <p style={fieldStyle}>
-            <strong> Created At: </strong>  { enquiry.createdAt ? new Date(enquiry.createdAt).toLocaleString() : 'N/A' }
+            <strong> Created At: </strong>  { enquiry.createdAt ? new Date(enquiry.createdAt).toLocaleString() : 'Not Available' }
           </p>
 
           <p style={fieldStyle}>
-            <strong> Updated At: </strong>  { enquiry.updatedAt ? new Date(enquiry.updatedAt).toLocaleString() : 'N/A' }
+            <strong> Updated At: </strong>  { enquiry.updatedAt ? new Date(enquiry.updatedAt).toLocaleString() : 'Not Available' }
           </p>
 
         </div>

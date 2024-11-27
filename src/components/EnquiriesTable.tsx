@@ -157,7 +157,7 @@ const EnquiriesTable : React.FC = () => {
 
   
   const handleDelete = async (event: React.MouseEvent, id: string) => {
-    event.stopPropagation(); // Stop the click event from propagating to the row
+    event.stopPropagation(); // Stoping the click event from propagating to the row
   
     if (window.confirm('Are you sure you want to delete this enquiry?')) {
       try {
@@ -294,14 +294,14 @@ const EnquiriesTable : React.FC = () => {
 
                     { enquiry.address
                       ? `${enquiry.address.street}, ${enquiry.address.city}, ${enquiry.address.state}, ${enquiry.address.pincode}, ${enquiry.address.country}`
-                      : 'N/A'
+                      : 'Not Available'
                     }
 
                   </td>
 
-                  <td style={tdStyle}>{enquiry.description || 'N/A'}</td>
+                  <td style={tdStyle}>{enquiry.description || 'Not Available' }</td>
 
-                  <td style={tdStyle}>{ enquiry.createdAt ? new Date(enquiry.createdAt).toLocaleString() : 'N/A' }</td>
+                  <td style={tdStyle}>{ enquiry.createdAt ? new Date(enquiry.createdAt).toLocaleString() : 'Not Available' }</td>
 
                   <td style={tdStyle}>
                     
