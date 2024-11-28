@@ -1,5 +1,17 @@
 import React, { useState, useEffect } from 'react';
 
+import {
+  modalOverlayStyle,
+  modalStyle,
+  formStyle,
+  labelStyle,
+  inputStyle,
+  checkboxStyle,
+  saveButtonStyle,
+  cancelButtonStyle
+} from './EditEnquiry.css'  ; 
+
+
 type Enquiry = {
   _id : string  ;
   guardianName: string;
@@ -320,70 +332,3 @@ export const EditModal: React.FC<{
 };
 
 
-// Styles for modal and form
-
-const modalOverlayStyle: React.CSSProperties = {
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  width: '100%',
-  height: '100%',
-  backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  overflow: 'auto', // Allow scrolling if modal content overflows
-};
-
-const modalStyle: React.CSSProperties = {
-  backgroundColor: '#fff',
-  padding: '20px',
-  borderRadius: '8px',
-  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-  width: '600px',
-  maxHeight: '90vh', // Limit height to 90% of the viewport
-  overflowY: 'auto', // Enable vertical scrolling within the modal
-};
-
-
-const formStyle: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-};
-
-const labelStyle: React.CSSProperties = {
-  marginBottom: '10px',
-  fontSize: '1rem',
-  color: '#34495e',
-};
-
-const inputStyle: React.CSSProperties = {
-  padding: '10px',
-  fontSize: '1rem',
-  border: '1px solid #ecf0f1',
-  borderRadius: '4px',
-  marginBottom: '15px',
-};
-
-const checkboxStyle: React.CSSProperties = {
-  marginBottom: '15px',
-};
-
-const saveButtonStyle: React.CSSProperties = {
-  padding: '10px 20px',
-  backgroundColor: '#2ecc71',
-  color: '#fff',
-  border: 'none',
-  borderRadius: '4px',
-  cursor: 'pointer',
-  marginRight: '10px',
-};
-
-const cancelButtonStyle: React.CSSProperties = {
-  padding: '10px 20px',
-  backgroundColor: '#e74c3c',
-  color: '#fff',
-  border: 'none',
-  borderRadius: '4px',
-  cursor: 'pointer',
-};

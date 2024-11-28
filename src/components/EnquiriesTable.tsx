@@ -206,6 +206,9 @@ const EnquiriesTable : React.FC = () => {
       }
   
       console.log("Update successful!");
+
+      setIsModalOpen(false);
+      
     } catch (error) {
       console.error("Error saving enquiry:", error);
     }
@@ -320,11 +323,11 @@ const EnquiriesTable : React.FC = () => {
           </table>
 
           <EditModal
-  isOpen={isModalOpen}
-  enquiry={selectedEnquiry} // Pass directly; don't force non-null
-  onClose={() => setIsModalOpen(false)}
-  onSave={handleSave}
-/>
+            isOpen={isModalOpen}
+            enquiry={selectedEnquiry} // Pass directly; don't force non-null
+            onClose={() => setIsModalOpen(false)}
+            onSave={handleSave}
+          />
 
 
           <div style={paginationStyle}>
