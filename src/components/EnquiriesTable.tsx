@@ -100,45 +100,46 @@ const EnquiriesTable : React.FC = () => {
     setInputValue( String(currentPage) )  ;
 
   } , [ currentPage ] )  ;
+
+  
+  const fetchEnquiries = async () => {
+      
+    try 
+    {
+      setLoading( true )  ;
+
+      setError( null )  ;
+
+      const response = await fetch(
+        `http://localhost:4000/admin?page=${currentPage}&limit=${itemsPerPage}`
+      )  ;
+
+      if ( !response.ok ) 
+      {
+        throw new Error( 'Failed to fetch enquiries' )  ;
+      }
+
+      const data : any = await response.json()  ;
+
+      setEnquiries( data.enquiryFormsData )  ;
+
+      setTotalCount( data.pagination.total )  ;
+
+    } 
+    catch ( err: any ) 
+    {
+
+      setError( err.message || 'Something went wrong' )  ;
+
+    } 
+    finally {
+
+      setLoading( false )  ;
+
+    }
+  }
   
   useEffect( () => {
-
-    const fetchEnquiries = async () => {
-      
-      try 
-      {
-        setLoading( true )  ;
-
-        setError( null )  ;
-
-        const response = await fetch(
-          `http://localhost:4000/admin?page=${currentPage}&limit=${itemsPerPage}`
-        )  ;
-
-        if ( !response.ok ) 
-        {
-          throw new Error( 'Failed to fetch enquiries' )  ;
-        }
-
-        const data : any = await response.json()  ;
-
-        setEnquiries( data.enquiryFormsData )  ;
-
-        setTotalCount( data.pagination.total )  ;
-
-      } 
-      catch ( err: any ) 
-      {
-  
-        setError( err.message || 'Something went wrong' )  ;
-
-      } 
-      finally {
-
-        setLoading( false )  ;
-
-      }
-    }
 
     fetchEnquiries()  ;
 
@@ -206,17 +207,19 @@ const EnquiriesTable : React.FC = () => {
       }
   
       console.log("Update successful!");
-
+  
+      // Close the modal
       setIsModalOpen(false);
-      
+  
+      // Refresh the enquiries list
+      await fetchEnquiries(); // Fetch updated enquiries
+  
     } catch (error) {
       console.error("Error saving enquiry:", error);
     }
   };
   
   
-  
-
   return (
 
     <div >
