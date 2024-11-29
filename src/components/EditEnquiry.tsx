@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'  ;
+
+import { useMutation, useQueryClient } from 'react-query'  ;
 
 import {
   modalOverlayStyle,
@@ -44,7 +46,10 @@ export const EditModal: React.FC<{
   onClose: () => void;
   onSave: (updatedEnquiry: Enquiry) => Promise<void>; // Accepts async functions
 }> = ({ isOpen, enquiry, onClose, onSave }) => { 
-  const [formData, setFormData] = useState<Enquiry>(
+
+  const queryClient = useQueryClient()  ;
+
+  const [ formData , setFormData ] = useState<Enquiry>(
     enquiry ?? {
       _id: '',
       guardianName: '',
@@ -73,34 +78,62 @@ export const EditModal: React.FC<{
   );
   
 
-  useEffect(() => {
+  useEffect( () => {
 
-    if (enquiry) {
-      setFormData({
-        ...enquiry,
-        guardianName: enquiry.guardianName || '',
-        guardianEmail: enquiry.guardianEmail || '',
-        guardianPhoneNumber: enquiry.guardianPhoneNumber || '',
-        guardianMobileNumberOpt: enquiry.guardianMobileNumberOpt || '',
-        studentName: enquiry.studentName || '',
-        dateOfBirth: enquiry.dateOfBirth || '',
-        currentSchool: enquiry.currentSchool || '',
-        lastYearGrade: enquiry.lastYearGrade || 'not applicable',
-        address: {
-          street: enquiry.address?.street || '',
-          city: enquiry.address?.city || '',
-          state: enquiry.address?.state || '',
-          pincode: enquiry.address?.pincode || '',
-          country: enquiry.address?.country || 'India',
-        },
-        description: enquiry.description || '',
-        enquirySource: enquiry.enquirySource || 'referral',
-      });
+    if ( enquiry ) {
+      setFormData( enquiry )  ;
     }
-  }, [enquiry]);
+  }, [ enquiry ] )  ;
   
   
+
+  const updateEnquiryMutation = useMutation(
+
+    async ( updatedEnquiry : Enquiry ) => {
+
+
+      const response = await fetch( `http://localhost:4000/admin/${updatedEnquiry._id}` , 
+        {
+          method: 'PATCH' ,
+          headers: { 'Content-Type' : 'application/json' } ,
+          body: JSON.stringify( updatedEnquiry ) ,
+        }
+      )  ;
+
+      if (!response.ok) {
+
+        const errorData = await response.json();
+
+        console.error("Error response:", errorData);
+
+        throw new Error(errorData.message || 'Failed to update enquiry');
+      }
   
+      return response.json();
+
+    } ,
+
+    {
+      onSuccess : () => {
+
+        // Invalidate and refetch data
+
+        queryClient.invalidateQueries( 'enquiries' )  ;
+
+        onClose()  ; // Close modal on success
+
+      },
+
+      onError : ( error: any ) => {
+
+        console.error( 'Update failed:' , error.message )  ;
+
+        alert( error.message || 'Failed to update enquiry' )  ;
+
+      },
+    }
+  )  ;
+
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -121,7 +154,7 @@ export const EditModal: React.FC<{
 
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
+    setFormData( (prevData) => ({
       ...prevData,
       address: {
         ...prevData.address,
@@ -131,9 +164,9 @@ export const EditModal: React.FC<{
   };
 
   const handleSubmit = (e: React.FormEvent) => {
+
     e.preventDefault()  ;
 
-    console.log("Submitting data:", formData)  ;
   
     // Validation: Ensure fields aren't empty unless optional
     if (!formData.guardianName || !formData.studentName) {
@@ -141,7 +174,7 @@ export const EditModal: React.FC<{
       return;
     }
   
-    onSave(formData);
+    updateEnquiryMutation.mutate( formData )  ;
   };
   
 
@@ -319,7 +352,7 @@ export const EditModal: React.FC<{
           {/* Buttons */}
           <div>
             <button type="submit" style={saveButtonStyle}>
-              Save
+            {updateEnquiryMutation.isLoading ? 'Saving...' : 'Save'}
             </button>
             <button type="button" onClick={onClose} style={cancelButtonStyle}>
               Cancel
