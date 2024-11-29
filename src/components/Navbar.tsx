@@ -8,6 +8,8 @@ import { useRouter } from 'next/navigation'  ;
 
 import styles from './Navbar.css'  ;
 
+
+
 const Navbar: React.FC = () => {
 
   const [ isLoggedIn , setIsLoggedIn ] = useState( false )  ;
@@ -20,10 +22,10 @@ const Navbar: React.FC = () => {
     
     const token = localStorage.getItem( 'token' )  ;
 
-    setAdminName( localStorage.getItem( 'adminName' ) )  ;
-
     if( token )
     { 
+      setAdminName( localStorage.getItem( 'adminName' ) )  ;
+
       setIsLoggedIn( true )  ;
     }
     else

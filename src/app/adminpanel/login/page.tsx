@@ -43,7 +43,7 @@ const Login: React.FC = () => {
 
       if ( !response.ok ) 
       {
-        console.log( data )  ;  // not working
+        console.log( data )  ; 
 
         throw new Error( 'Invalid username or password' )  ;
       }
