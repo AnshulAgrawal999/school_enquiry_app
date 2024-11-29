@@ -1,12 +1,12 @@
 'use client'  ;
 
-import { useEffect , useState } from "react"  ;
-
 import { useParams } from "next/navigation"  ;
 
 import axios from "axios"  ;
 
 import { styles } from './id.css'  ;
+
+import { useQuery } from 'react-query';
 
 const { 
   containerStyle , 
@@ -18,7 +18,6 @@ const {
   loadingStyle , 
   errorStyle 
 } = styles  ;
-
 
 
 type Address = {
@@ -73,60 +72,52 @@ type Enquiry = {
   updatedAt : string  ;
 }
 
+const fetchEnquiry = async ( id: string ) => {
+
+  const response = await axios.get( `http://localhost:4000/admin/${id}` )  ;
+
+  return response.data.existingEnquiryForm  ;
+};
+
 export default function EnquiryDetailPage() {
 
   const params = useParams()  ;
 
   const { id } = params  ;
 
-  const [ enquiry , setEnquiry ] = useState <Enquiry | null> ( null )  ;
+  const {
+    data: enquiry,
 
-  const [ loading , setLoading ] = useState( true )  ;
+    isLoading,
 
-  const [ error , setError ] = useState <string | null> ( null )  ;
+    isError,
+    
+    error,
 
-  useEffect( () => {
+  } = useQuery <Enquiry , Error > (
 
-    const fetchEnquiry = async () => {
+    [ 'enquiry' , id ] ,
 
-      try {
+    () => fetchEnquiry( id as string ) ,
 
-        const response = await axios.get( `http://localhost:4000/admin/${id}` )  ;
-
-        setEnquiry( response.data.existingEnquiryForm )  ;
-
-        console.log( response )  ;
-
-      } 
-      catch ( err : any ) 
-      {
-        setError( err.response?.data?.message || "Failed to fetch enquiry details" )  ;
-      } 
-      finally 
-      {
-        setLoading( false )  ;
-      }
-    }
-
-    if ( id ) 
     {
-      fetchEnquiry()  ;
+      enabled: !!id , // Only run query if 'id' is present
     }
+  )  ;
 
-  } , [id] )  ;
 
-  if ( loading ) {
+  if ( isLoading ) {
 
     return <p style={ loadingStyle } > Loading enquiry details... </p>  ;
 
   }
 
-  if ( error ) {
+  if ( isError ) {
 
     return (
 
       <div style={errorStyle} >
-        <p> Error: {error} </p>
+        <p> Error: { error.message } </p>
       </div>
 
     )  ;
