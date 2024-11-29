@@ -8,15 +8,51 @@ import { useRouter } from 'next/navigation'  ;
 
 import styles from './Navbar.css'  ;
 
+import { useQuery } from 'react-query'  ;
+
+
+
+const validateToken = async () => {
+
+  const token = localStorage.getItem( 'token' )  ;
+
+  if ( !token ) {
+    throw new Error( 'No token found' )  ;
+  }
+
+  const response = await fetch( 'http://localhost:4000/admin/validate-token' , {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token , 
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Invalid or expired token');
+  }
+
+  const data = await response.json();
+  return data; // You can return admin details or a success message
+
+} 
+
 
 
 const Navbar: React.FC = () => {
 
-  const [ isLoggedIn , setIsLoggedIn ] = useState( false )  ;
-
   const router = useRouter()  ;
 
-  const [ adminName , setAdminName ] = useState < string | null > (  "" )  ;
+  // React Query hook to validate the JWT token
+  const { data, isLoading, isError } = useQuery('validateToken', validateToken, {
+    enabled: !!localStorage.getItem('token'), // Only run query if token exists
+    onError: () => {
+      router.push('/adminpanel/login'); // Redirect if the token is invalid or expired
+    },
+  });
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
 
   useEffect( () => {
     
@@ -24,8 +60,6 @@ const Navbar: React.FC = () => {
 
     if( token )
     { 
-      setAdminName( localStorage.getItem( 'adminName' ) )  ;
-
       setIsLoggedIn( true )  ;
     }
     else
@@ -48,6 +82,8 @@ const Navbar: React.FC = () => {
     localStorage.removeItem( 'adminName' )  ;
 
     setIsLoggedIn( false )  ;
+
+    router.push('/adminpanel/login')  ;
   } 
 
   return (
@@ -86,7 +122,9 @@ const Navbar: React.FC = () => {
       <div style={ styles.navContainer } >  
 
         <div style={ styles.menu } >
-          {  adminName }
+         
+          { isLoading ? 'Loading...' : isError ? 'Error validating token' : data?.adminName }
+
         </div>
 
         <div style={ styles.menu } >

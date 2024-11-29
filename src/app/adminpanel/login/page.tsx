@@ -2,9 +2,34 @@
 
 import { useState } from 'react'  ;
 
+import { useMutation } from 'react-query'  ;
+
 import { useRouter } from 'next/navigation'  ;
 
-import styles from './login.css'  ;
+import styles from './login.css'  ; 
+
+
+const loginUser = async ( { username, password } : { username : string ; password : string } ) => 
+    {
+      const response = await fetch( 'http://localhost:4000/admin/login' , 
+      {
+        method: 'POST' ,
+        headers: { 'Content-Type': 'application/json' } ,
+        body: JSON.stringify({ username, password }) ,
+      }
+  );
+
+  if ( !response.ok ) {
+
+    const errorData = await response.json()  ;
+
+    throw new Error( errorData.message || 'Login failed' )  ;
+  }
+
+  return response.json()  ;
+};
+
+
 
 const Login: React.FC = () => {
 
@@ -15,6 +40,22 @@ const Login: React.FC = () => {
   const [ error , setError ] = useState( '' )  ;
 
   const router = useRouter()  ;
+
+  const mutation = useMutation( loginUser , 
+    {
+      onSuccess : data => {
+
+        localStorage.setItem( 'token' , data.token )  ;
+
+        localStorage.setItem( 'adminName' , username )  ;
+
+        router.push( '/adminpanel' )  ;
+      },
+
+      onError : ( error: any ) => {
+        setError( error.message || 'An unexpected error occurred' )  ;
+      },
+  });
 
   const handleSubmit = async ( e : React.FormEvent ) => {
 
@@ -27,37 +68,7 @@ const Login: React.FC = () => {
       return  ;
     }
 
-    try {
-      
-      const response = await fetch( 'http://localhost:4000/admin/login' , 
-        {
-          method: 'POST' ,
-          headers: {
-            'Content-Type': 'application/json' ,
-          },
-          body: JSON.stringify( { username , password } ) ,
-        }
-      );
-
-      const data = await response.json()  ;
-
-      if ( !response.ok ) 
-      {
-        console.log( data )  ; 
-
-        throw new Error( 'Invalid username or password' )  ;
-      }
-
-      localStorage.setItem( 'token' , data.token )  ;
-
-      localStorage.setItem( 'adminName' , username )  ;
-
-      router.push( '/adminpanel' )  ;
-
-    } catch ( error: any ) {
-
-      setError( error.message || 'An unexpected error occurred' )  ;
-    }
+    mutation.mutate( { username , password } )  ;
 
   }  ;
 
@@ -102,8 +113,8 @@ const Login: React.FC = () => {
 
         </div>
 
-        <button type="submit" style={ styles.button } >
-          Login
+        <button type="submit" style={styles.button} disabled={mutation.isLoading} >
+          { mutation.isLoading ? 'Logging in...' : 'Login' }
         </button>
 
       </form>
