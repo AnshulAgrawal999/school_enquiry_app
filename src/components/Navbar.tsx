@@ -28,12 +28,15 @@ const validateToken = async () => {
     },
   });
 
-  if (!response.ok) {
+  console.log( response )  ;
+
+  if ( !response.ok ) {
     throw new Error('Invalid or expired token');
   }
 
-  const data = await response.json();
-  return data; // You can return admin details or a success message
+  const data = await response.json()  ;
+
+  return data; 
 
 } 
 

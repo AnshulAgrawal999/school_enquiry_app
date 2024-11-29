@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation'  ;
 import styles from './login.css'  ; 
 
 
-const loginUser = async ( { username, password } : { username : string ; password : string } ) => 
+const loginUser = async ( { username , password } : { username : string ; password : string } ) => 
     {
       const response = await fetch( 'http://localhost:4000/admin/login' , 
       {
@@ -31,7 +31,7 @@ const loginUser = async ( { username, password } : { username : string ; passwor
 
 
 
-const Login: React.FC = () => {
+const Login : React.FC = () => {
 
   const [ username , setUsername ] = useState( '' )  ;
 

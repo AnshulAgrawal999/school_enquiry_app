@@ -2,6 +2,8 @@
 
 import React , { useEffect , useState } from 'react'  ;
 
+import { useQuery , useMutation , useQueryClient } from 'react-query'  ;
+
 import { EditModal } from './EditEnquiry'  ;
 
 import {
@@ -71,79 +73,82 @@ type Enquiry = {
   createdAt ?: string  ;
 }
 
-const EnquiriesTable : React.FC = () => {
+const fetchEnquiries = async ( page: number , itemsPerPage: number ) => {
 
-  const [ enquiries , setEnquiries ] = useState< Enquiry[] > ( [] )  ;
+  const response = await fetch( `http://localhost:4000/admin?page=${page}&limit=${itemsPerPage}` )  ;
+
+  if ( !response.ok ) throw new Error( 'Failed to fetch enquiries' )  ;
+
+  return response.json()  ; 
+};
+
+const deleteEnquiry = async ( id : string ) => {
+
+  const response = await fetch( `http://localhost:4000/admin/${id}` , { method: 'DELETE' } )  ;
+
+  if ( !response.ok ) throw new Error( 'Failed to delete enquiry' )  ;
+
+};
+
+
+const EnquiriesTable : React.FC = () => {
 
   const [ currentPage , setCurrentPage ] = useState( 1 )  ;
 
-  const [ totalCount , setTotalCount ] = useState( 0 )  ;
-
-  const [ loading , setLoading ] = useState( true )  ;
-
-  const [ error , setError ] = useState < string | null > ( null )  ;
-
-  const [ editEnquiry , setEditEnquiry ] = useState< Enquiry | null > ( null )  ;
+  const [ itemsPerPage ] = useState( 8 )  ;
 
   const [ selectedEnquiry , setSelectedEnquiry ] = useState< Enquiry | null > ( null )  ;
 
   const [ isModalOpen , setIsModalOpen ] = useState( false )  ;
 
-  const [ inputValue , setInputValue ] = useState( "1" ) ; // Track the input value separately
+  const [ inputValue , setInputValue ] = useState( "1" ) ; // Track the input value separately 
 
-  const itemsPerPage = 8  ;
+  const queryClient = useQueryClient();
 
-  const totalPages = Math.ceil( totalCount / itemsPerPage )  ; // Compute total pages
+  const { data , error , isLoading } = useQuery(
 
-  useEffect( () => {
+    [ 'enquiries' , currentPage , itemsPerPage ] ,
 
-    setInputValue( String(currentPage) )  ;
+    () => fetchEnquiries( currentPage , itemsPerPage ) ,
 
-  } , [ currentPage ] )  ;
+    { keepPreviousData: true }
+  )  ;
 
+  const mutation = useMutation(deleteEnquiry, {
+    onSuccess: () => queryClient.invalidateQueries('enquiries'),
+  });
   
-  const fetchEnquiries = async () => {
-      
-    try 
-    {
-      setLoading( true )  ;
-
-      setError( null )  ;
-
-      const response = await fetch(
-        `http://localhost:4000/admin?page=${currentPage}&limit=${itemsPerPage}`
-      )  ;
-
-      if ( !response.ok ) 
-      {
-        throw new Error( 'Failed to fetch enquiries' )  ;
-      }
-
-      const data : any = await response.json()  ;
-
-      setEnquiries( data.enquiryFormsData )  ;
-
-      setTotalCount( data.pagination.total )  ;
-
-    } 
-    catch ( err: any ) 
-    {
-
-      setError( err.message || 'Something went wrong' )  ;
-
-    } 
-    finally {
-
-      setLoading( false )  ;
-
+  const handleDelete = async (event: React.MouseEvent, id: string) => {
+    event.stopPropagation();
+    if (window.confirm('Are you sure you want to delete this enquiry?')) {
+      mutation.mutate(id);
     }
-  }
-  
-  useEffect( () => {
+  };
 
-    fetchEnquiries()  ;
+  const handleEdit = (event: React.MouseEvent, enquiry: Enquiry) => {
+    event.stopPropagation();
+    setSelectedEnquiry(enquiry);
+    setIsModalOpen(true);
+  };
 
-  } , [ currentPage] )  ;
+  const handleSave = async (updatedEnquiry: Enquiry) => {
+    try {
+      await fetch(`http://localhost:4000/admin/${updatedEnquiry._id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedEnquiry),
+      });
+      setIsModalOpen(false);
+      queryClient.invalidateQueries('enquiries');
+    } catch (error) {
+      console.error('Error saving enquiry:', error);
+    }
+  };
+
+  const enquiries = data?.enquiryFormsData || [];
+  const totalCount = data?.pagination.total || 0;
+  const totalPages = Math.ceil(totalCount / itemsPerPage);
+
 
   
   const handleRowHover = ( event : React.MouseEvent<HTMLTableRowElement> ) => 
@@ -156,70 +161,12 @@ const EnquiriesTable : React.FC = () => {
     event.currentTarget.style.backgroundColor = ''  ;  // Reset background color
   }
 
+  useEffect(() => {
+    setInputValue(String(currentPage));
+  }, [currentPage]);
   
-  const handleDelete = async (event: React.MouseEvent, id: string) => {
-    event.stopPropagation(); // Stoping the click event from propagating to the row
-  
-    if (window.confirm('Are you sure you want to delete this enquiry?')) {
-      try {
-        const response = await fetch(`http://localhost:4000/admin/${id}`, {
-          method: 'DELETE',
-        });
-  
-        if (!response.ok) {
-          throw new Error('Failed to delete enquiry');
-        }
-  
-        setEnquiries((prevEnquiries) =>
-          prevEnquiries.filter((enquiry) => enquiry._id !== id)
-        );
-  
-        alert('Enquiry deleted successfully!');
-      } catch (err: any) {
-        alert(err.message || 'Something went wrong');
-      }
-    }
-  };
   
 
-  const handleEdit = (event: React.MouseEvent, enquiry: Enquiry) => {
-    event.stopPropagation(); // Stop the click propagation to enquiry row
-    setEditEnquiry(enquiry);
-    setSelectedEnquiry(enquiry); // Set the selected enquiry here
-    setIsModalOpen(true);
-  };
-  
-  
-  const handleSave = async (updatedEnquiry: Enquiry) => {
-    try {
-      const response = await fetch(`http://localhost:4000/admin/${updatedEnquiry._id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedEnquiry),
-      });
-  
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Error response:", errorData);
-        throw new Error(`Error ${response.status}: ${response.statusText}`);
-      }
-  
-      console.log("Update successful!");
-  
-      // Close the modal
-      setIsModalOpen(false);
-  
-      // Refresh the enquiries list
-      await fetchEnquiries(); // Fetch updated enquiries
-  
-    } catch (error) {
-      console.error("Error saving enquiry:", error);
-    }
-  };
-  
-  
   return (
 
     <div >
@@ -227,7 +174,7 @@ const EnquiriesTable : React.FC = () => {
       <h1 style={ headerStyle }> Enquiries Table </h1>
 
       { 
-        loading ? ( <p style={ loadingStyle } > Loading... </p> ) : error ? ( <p style={ errorStyle } > { error } </p> ) : 
+        isLoading ? ( <p style={ loadingStyle } > Loading... </p> ) : error ? ( <p style={ errorStyle } > { (error as Error).message } </p> ) : 
         (
         <>
           <table style={ tableStyle } >
@@ -259,7 +206,7 @@ const EnquiriesTable : React.FC = () => {
 
             <tbody>
 
-            { enquiries.map( ( enquiry , index ) => (
+            { enquiries.map( (enquiry: Enquiry, index: number) => (
                 
                 <tr
                   key={ enquiry._id }
@@ -327,7 +274,7 @@ const EnquiriesTable : React.FC = () => {
 
           <EditModal
             isOpen={isModalOpen}
-            enquiry={selectedEnquiry} // Pass directly; don't force non-null
+            enquiry={selectedEnquiry} 
             onClose={() => setIsModalOpen(false)}
             onSave={handleSave}
           />
