@@ -100,16 +100,16 @@ export const EditModal: React.FC<{
         }
       )  ;
 
-      if (!response.ok) {
+      if ( !response.ok ) {
 
-        const errorData = await response.json();
+        const errorData = await response.json()  ;
 
-        console.error("Error response:", errorData);
+        console.error( "Error response:" , errorData )  ;
 
-        throw new Error(errorData.message || 'Failed to update enquiry');
+        throw new Error( errorData.message || 'Failed to update enquiry' )  ;
       }
   
-      return response.json();
+      return response.json()  ;
 
     } ,
 
@@ -138,6 +138,7 @@ export const EditModal: React.FC<{
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
+
     const { name, value, type } = e.target;
     if (type === 'checkbox') {
       setFormData((prevData) => ({
@@ -150,6 +151,7 @@ export const EditModal: React.FC<{
         [name]: value,
       }));
     }
+
   };
 
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {

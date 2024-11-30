@@ -6,6 +6,8 @@ import { useQuery , useMutation , useQueryClient } from 'react-query'  ;
 
 import { EditModal } from './EditEnquiry'  ;
 
+import { useRouter , useSearchParams } from 'next/navigation'  ;   
+
 import {
   headerStyle,
   loadingStyle,
@@ -93,7 +95,11 @@ const deleteEnquiry = async ( id : string ) => {
 
 const EnquiriesTable : React.FC = () => {
 
-  const [ currentPage , setCurrentPage ] = useState( 1 )  ;
+  const router = useRouter()  ;
+
+  const searchParams = useSearchParams();
+
+  const queryClient = useQueryClient()  ;
 
   const [ itemsPerPage ] = useState( 8 )  ;
 
@@ -101,9 +107,10 @@ const EnquiriesTable : React.FC = () => {
 
   const [ isModalOpen , setIsModalOpen ] = useState( false )  ;
 
+  const currentPage = parseInt( searchParams.get( 'page' ) || '1' , 10 )  ; 
+
   const [ inputValue , setInputValue ] = useState( "1" ) ; // Track the input value separately 
 
-  const queryClient = useQueryClient();
 
   const { data , error , isLoading } = useQuery(
 
@@ -114,41 +121,57 @@ const EnquiriesTable : React.FC = () => {
     { keepPreviousData: true }
   )  ;
 
-  const mutation = useMutation(deleteEnquiry, {
-    onSuccess: () => queryClient.invalidateQueries('enquiries'),
-  });
+  const mutation = useMutation( deleteEnquiry , {
+
+    onSuccess: () => queryClient.invalidateQueries( 'enquiries' ) ,
+
+  })  ;
+
+  const enquiries = data?.enquiryFormsData || []  ;
+
+  const totalCount = data?.pagination.total || 0  ;
+
+  const totalPages = Math.ceil(totalCount / itemsPerPage)  ;
+
   
-  const handleDelete = async (event: React.MouseEvent, id: string) => {
-    event.stopPropagation();
-    if (window.confirm('Are you sure you want to delete this enquiry?')) {
-      mutation.mutate(id);
+  const handleDelete = async ( event: React.MouseEvent , id: string ) => {
+    
+    event.stopPropagation()  ;
+
+    if ( window.confirm( 'Are you sure you want to delete this enquiry?' ) ) {
+
+      mutation.mutate( id )  ;
     }
   };
 
-  const handleEdit = (event: React.MouseEvent, enquiry: Enquiry) => {
-    event.stopPropagation();
-    setSelectedEnquiry(enquiry);
-    setIsModalOpen(true);
+  const handleEdit = ( event: React.MouseEvent , enquiry: Enquiry ) => {
+    
+    event.stopPropagation()  ;
+
+    setSelectedEnquiry(enquiry)  ;
+
+    setIsModalOpen( true )  ;
   };
 
-  const handleSave = async (updatedEnquiry: Enquiry) => {
+  const handleSave = async ( updatedEnquiry : Enquiry ) => {
+
     try {
       await fetch(`http://localhost:4000/admin/${updatedEnquiry._id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedEnquiry),
       });
-      setIsModalOpen(false);
-      queryClient.invalidateQueries('enquiries');
+
+      setIsModalOpen( false )  ;
+
+      queryClient.invalidateQueries( 'enquiries' )  ;
+
     } catch (error) {
-      console.error('Error saving enquiry:', error);
+
+      console.error('Error saving enquiry:', error)  ;
+
     }
   };
-
-  const enquiries = data?.enquiryFormsData || [];
-  const totalCount = data?.pagination.total || 0;
-  const totalPages = Math.ceil(totalCount / itemsPerPage);
-
 
   
   const handleRowHover = ( event : React.MouseEvent<HTMLTableRowElement> ) => 
@@ -161,10 +184,44 @@ const EnquiriesTable : React.FC = () => {
     event.currentTarget.style.backgroundColor = ''  ;  // Reset background color
   }
 
-  useEffect(() => {
-    setInputValue(String(currentPage));
-  }, [currentPage]);
-  
+  useEffect( () => {
+
+    setInputValue( String( currentPage ) )  ;
+
+  }, [ currentPage ] )  ;
+
+
+  const handlePageChange = ( page: number ) => {
+
+    const validPage = Math.max( 1 , Math.min( page , totalPages ) )  ;
+
+    router.push( `?page=${validPage}` )  ; // Update the URL query parameter
+  };
+
+  const handleInputChange = ( e: React.ChangeEvent<HTMLInputElement> ) => {
+
+    setInputValue( e.target.value )  ;
+
+  };
+
+  const handleInputBlur = () => {
+
+    const validPage = Math.max( 1 , Math.min( Number( inputValue ) || 1 , totalPages ) )  ;
+
+    handlePageChange( validPage )  ;
+
+  };
+
+  const handleInputKeyDown = (e: React.KeyboardEvent) => {
+
+    if ( e.key === 'Enter' ) {
+
+      const validPage = Math.max( 1 , Math.min( Number( inputValue ) || 1 , totalPages ) )  ;
+
+      handlePageChange( validPage )  ;
+    }
+
+  };
   
 
   return (
@@ -273,46 +330,39 @@ const EnquiriesTable : React.FC = () => {
           </table>
 
           <EditModal
-            isOpen={isModalOpen}
-            enquiry={selectedEnquiry} 
-            onClose={() => setIsModalOpen(false)}
-            onSave={handleSave}
+            isOpen={ isModalOpen }
+            enquiry={ selectedEnquiry } 
+            onClose={ () => setIsModalOpen( false ) }
+            onSave={ handleSave }
           />
 
 
           <div style={paginationStyle}>
+
             <button
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} // Go to the previous page
-              disabled={currentPage === 1} // Disable if on the first page
-              style={buttonStyle}
-            >
+              onClick={ () => handlePageChange(currentPage - 1) } 
+              disabled={ currentPage === 1 } 
+              style={buttonStyle} >
               Previous
             </button>
+
             <span style={pageIndicatorStyle}>
               Page {currentPage} of {totalPages}
             </span>
+
             <input
               type="number"
               style={{ ...pageIndicatorStyle, width: "50px", textAlign: "center" }}
               value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)} // Allow unrestricted typing
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  const validPage = Math.max(1, Math.min(Number(inputValue) || 1, totalPages));
-                  setCurrentPage(validPage); // Update current page
-                }
-              }}
-              onBlur={() => {
-                // Validate and sync input on losing focus
-                const validPage = Math.max(1, Math.min(Number(inputValue) || 1, totalPages));
-                setCurrentPage(validPage);
-              }}
+              onChange={handleInputChange } // Allow unrestricted typing
+              onKeyDown={ handleInputKeyDown }
+              onBlur={ handleInputBlur }
               min={1}
               max={totalPages}
             />
             <button
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} // Go to the next page
-              disabled={currentPage === totalPages} // Disable if on the last page
+              onClick={ () => handlePageChange(currentPage + 1) } 
+              disabled={currentPage === totalPages} 
               style={buttonStyle}
             >
               Next
