@@ -48,7 +48,9 @@ const Navbar: React.FC = () => {
 
   // React Query hook to validate the JWT token
   const { data, isLoading, isError } = useQuery('validateToken', validateToken, {
-    enabled: !!localStorage.getItem('token'), // Only run query if token exists
+
+    enabled: typeof window !== 'undefined' && !!localStorage.getItem('token'), // Only run query if token exists
+
     onError: () => {
       router.push('/adminpanel/login'); // Redirect if the token is invalid or expired
     },
