@@ -131,7 +131,7 @@ const EnquiriesTable : React.FC = () => {
 
   const totalCount = data?.pagination.total || 0  ;
 
-  const totalPages = Math.ceil(totalCount / itemsPerPage)  ;
+  const totalPages = Math.ceil(totalCount / itemsPerPage) || 1  ;
 
   
   const handleDelete = async ( event: React.MouseEvent , id: string ) => {
@@ -190,23 +190,32 @@ const EnquiriesTable : React.FC = () => {
 
   }, [ currentPage ] )  ;
 
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      handlePageChange(totalPages);
+    }
+  }, [totalPages]);
+  
+
 
   const handlePageChange = ( page: number ) => {
 
-    const validPage = Math.max( 1 , Math.min( page , totalPages ) )  ;
+    const validPage = Math.max( 1 , Math.min( Number( inputValue ) || 1 , totalPages ) )  ;
 
     router.push( `?page=${validPage}` )  ; // Update the URL query parameter
   };
 
   const handleInputChange = ( e: React.ChangeEvent<HTMLInputElement> ) => {
 
-    setInputValue( e.target.value )  ;
+    setInputValue(e.target.value); // Just update the state without validation
 
   };
 
   const handleInputBlur = () => {
 
     const validPage = Math.max( 1 , Math.min( Number( inputValue ) || 1 , totalPages ) )  ;
+
+    setInputValue(String(validPage));
 
     handlePageChange( validPage )  ;
 
@@ -217,6 +226,8 @@ const EnquiriesTable : React.FC = () => {
     if ( e.key === 'Enter' ) {
 
       const validPage = Math.max( 1 , Math.min( Number( inputValue ) || 1 , totalPages ) )  ;
+
+      setInputValue( String(validPage) )  ;
 
       handlePageChange( validPage )  ;
     }
