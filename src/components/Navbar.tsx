@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation'  ;
 import styles from './Navbar.css'  ;
 
 import { useQuery } from 'react-query'  ;
+import axios from 'axios';
 
 
 
@@ -80,16 +81,51 @@ const Navbar: React.FC = () => {
     router.push( '/adminpanel/login' )  ;
   } 
 
-  const handleLogout = () => {
+  
+const handleLogout = async () => {
+  try {
 
-    localStorage.removeItem( 'token' )  ;
+    const token = localStorage.getItem('token');
 
-    localStorage.removeItem( 'adminName' )  ;
+    if (!token) {
+      throw new Error('No token found in localStorage');
+    }
 
-    setIsLoggedIn( false )  ;
+    // Send POST request to the backend
+    const response = await axios.post(
+      'http://localhost:4000/admin/logout',
+      {},
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
 
-    router.push('/adminpanel/login')  ;
-  } 
+    if (response.status === 200) {
+      console.log(response.data.message);
+
+      // Clear local storage and redirect
+      localStorage.removeItem('token');
+
+      localStorage.removeItem('adminName');
+
+      setIsLoggedIn(false);
+
+      router.push('/adminpanel/login');
+
+    } else {
+
+      console.error('Logout failed', response.data)  ;
+
+    }
+  } catch (error : any ) {
+
+    console.error('Error during logout:', error.message)  ;
+
+    alert('Failed to log out.')  ;
+  }
+};
 
   return (
 
