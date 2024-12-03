@@ -1,19 +1,24 @@
-import Navbar from '@/components/Navbar'  ;
+'use client'
 
-import EnquiryDetailPage from '@/components/individualEnquiry'
+import Navbar from '@/components/Navbar';
+import EnquiryDetailPage from '@/components/individualEnquiry';
+import CommentSection from '@/components/CommentSection';
+import { useParams } from 'next/navigation';
 
 export default function EnquiriePage() {
+  const params = useParams();
+  
+  const { id } = params;
 
-    return (
+  if (!id) {
+    return <div>Loading...</div>; // Or handle the case when the id is not available
+  }
 
-      <div>
-
-        <Navbar/>
-
-        <EnquiryDetailPage />
-
-      </div>
-
-    )  ;
-
+  return (
+    <div>
+      <Navbar />
+      <EnquiryDetailPage />
+      <CommentSection studentId={id as string} />
+    </div>
+  );
 }

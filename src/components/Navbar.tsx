@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation'  ;
 import styles from './Navbar.css'  ;
 
 import { useQuery } from 'react-query'  ;
+
 import axios from 'axios';
 
 
@@ -32,7 +33,7 @@ const validateToken = async () => {
   console.log( response )  ;
 
   if ( !response.ok ) {
-    throw new Error('Invalid or expired token');
+    throw new Error( 'Invalid or expired token' )  ;
   }
 
   const data = await response.json()  ;
