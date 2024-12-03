@@ -17,7 +17,7 @@ interface AdminCommentSectionProps {
 const CommentSection: React.FC<AdminCommentSectionProps> = ({ studentId }) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState('');
-  const [username] = useState('admin'); // hardcoded as admin, can be dynamic if needed
+  const [ username , setUsername ] = useState( '' )  ;  
 
   // Fetch existing remarks when the component mounts
   useEffect(() => {
@@ -32,6 +32,14 @@ const CommentSection: React.FC<AdminCommentSectionProps> = ({ studentId }) => {
 
     fetchComments();
   }, [studentId]);
+
+  useEffect( ()=>{
+    
+    if (typeof window !== 'undefined') {
+        setUsername(localStorage.getItem('adminName') || '');
+      }
+
+  } ,[] )
 
   // Handle new comment submission
   const handleAddComment = async () => {
