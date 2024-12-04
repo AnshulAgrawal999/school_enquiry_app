@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+"use client"
+import React, { useEffect, useState } from "react";
 
 import './StudentFilter.css';
 
@@ -14,11 +15,9 @@ interface FilterProps {
 }
 
 // Define types for props
-interface StudentFilterProps {
-  onFilter: (filters: FilterProps) => void;
-}
 
-const StudentFilter: React.FC<StudentFilterProps> = ({ onFilter }) => {
+
+const StudentFilter: React.FC<any> = ({ onFilter, currentFilters }) => {
   const initialFilters: FilterProps = {
     limit: 10,
     page: 1,
@@ -29,7 +28,11 @@ const StudentFilter: React.FC<StudentFilterProps> = ({ onFilter }) => {
     nameSort: "",
   };
 
-  const [filters, setFilters] = useState<FilterProps>(initialFilters);
+  const [filters, setFilters] = useState<FilterProps>(currentFilters);
+
+  useEffect(() => {
+    setFilters(currentFilters); // Update state whenever currentFilters change
+  }, [currentFilters]);
 
   // Handle input changes
   const handleChange = (

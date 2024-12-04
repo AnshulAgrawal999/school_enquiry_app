@@ -126,7 +126,7 @@ const EnquiriesTable: React.FC<{ initialFilters?: Record<string, any> }> = ({
   return (
     <div>
       <h1 style={headerStyle}>Enquiries Table</h1>
-      <StudentFilter onFilter={handleFilterUpdate} />
+      <StudentFilter onFilter={handleFilterUpdate} currentFilters={filters} />
 
       {isLoading ? (
         <p style={loadingStyle}>Loading...</p>
