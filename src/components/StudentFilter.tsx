@@ -6,7 +6,7 @@ interface FilterProps {
   page: number;
   state: string;
   enquirySource: string;
-  wantHostel: boolean;
+  wantHostel: any ;
   searchedName: string;
   sort: string;
   nameSort: string;
@@ -23,7 +23,7 @@ const StudentFilter: React.FC<StudentFilterProps> = ({ onFilter }) => {
     page: 1,
     state: "",
     enquirySource: "",
-    wantHostel: false,
+    wantHostel : null ,
     searchedName: "",
     sort: "",
     nameSort: "",
