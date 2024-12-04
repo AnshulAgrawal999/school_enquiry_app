@@ -11,7 +11,7 @@ export default function EnquiriePage() {
 
         <Navbar/>
 
-        <EnquiriesTable initialFilters={ { limit: 10, page: 1 } } /> 
+        <EnquiriesTable /> 
 
       </div>
 

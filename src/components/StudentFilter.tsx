@@ -19,7 +19,7 @@ interface StudentFilterProps {
 
 const StudentFilter: React.FC<StudentFilterProps> = ({ onFilter }) => {
   const initialFilters: FilterProps = {
-    limit: 8,
+    limit: 10,
     page: 1,
     state: "",
     enquirySource: "",
