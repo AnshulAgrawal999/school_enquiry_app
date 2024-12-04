@@ -161,7 +161,7 @@ const EnquiriesTable: React.FC<{ initialFilters?: Record<string, any> }> = ({
                 <tr
                   key={enquiry._id}
                   style={trStyle}
-                  onClick={() => (window.location.href = `/adminpanel/enquirytable/${enquiry._id}`)}
+                  onClick={()=>router.push(`/adminpanel/enquirytable/${enquiry._id}`)}
                 >
                   <td style={tdStyle}>{(filters.page - 1) * filters.limit + index + 1}</td>
                   <td style={tdStyle}>{enquiry.studentName}</td>
