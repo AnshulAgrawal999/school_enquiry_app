@@ -81,7 +81,7 @@ const EnquiriesTable: React.FC<{ initialFilters?: Record<string, any> }> = ({
   const fetchEnquiries = async (filters: Record<string, any>) => {
 
     // const response = await axios.get('http://localhost:4000/admin', {
-    //   params: { page: 1, limit: 10 }, // getting Request all 120 entries
+    //   params: { page: 1, limit: 10 }, // getting all 120 entries
     // });
 
     console.log(filters)  ;

@@ -419,6 +419,21 @@ export default function EnquiryDetailPage() {
     }
   };
 
+  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+  
+    if (editData) {
+      setEditData({
+        ...editData,
+        address: {
+          ...editData.address,
+          [name]: value, // Directly use 'name' as the key for the address field
+        },
+      });
+    }
+  };
+  
+
   // New: Handle save button click to submit changes
   const handleSave = () => {
     if (editData) {
@@ -695,71 +710,81 @@ export default function EnquiryDetailPage() {
           <p>{enquiry.updatedAt ? new Date(enquiry.updatedAt).toLocaleString() : 'Not Available' }</p>
         </div>
 
+
         {/* Address */}
         <div style={fieldGroupStyle}>
           <h2 style={sectionHeaderStyle}>Address</h2>
+
+          <p style={fieldStyle}><strong> Street: </strong></p>
           {editData ? (
-            <>
-              <p style={fieldStyle}><strong>Street:</strong></p>
-              <input
-                type="text"
-                name="addressStreet"
-                value={editData.address.street}
-                onChange={handleChange}
-                style={{ padding: '5px', width: '100%' }}
-              />
+            <input
+              type="text"
+              name="street"
+              value={editData.address.street}
+              onChange={handleAddressChange}
+              style={{ padding: '5px', width: '100%' }}
+            />
+            ) : (
+              <p>{enquiry.address.street}</p>
+            )
+          }
 
-              <p style={fieldStyle}><strong>City:</strong></p>
-              <input
-                type="text"
-                name="addressCity"
-                value={editData.address.city}
-                onChange={handleChange}
-                style={{ padding: '5px', width: '100%' }}
-              />
+          <p style={fieldStyle}><strong> City: </strong></p>
+          {editData ? (
+            <input
+              type="text"
+              name="city"
+              value={editData.address.city}
+              onChange={handleAddressChange}
+              style={{ padding: '5px', width: '100%' }}
+            />
+            ) : (
+              <p>{enquiry.address.city}</p>
+            )
+          }
 
-              <p style={fieldStyle}><strong>State:</strong></p>
-              <input
-                type="text"
-                name="addressState"
-                value={editData.address.state}
-                onChange={handleChange}
-                style={{ padding: '5px', width: '100%' }}
-              />
+          <p style={fieldStyle}> <strong> State: </strong></p>
+          {editData ? (
+            <input
+              type="text"
+              name="state"
+              value={editData.address.state}
+              onChange={handleAddressChange}
+              style={{ padding: '5px', width: '100%' }}
+            />
+            ) : (
+              <p>{enquiry.address.state}</p>
+            )
+          }
 
-              <p style={fieldStyle}><strong>Pincode:</strong></p>
-              <input
-                type="text"
-                name="addressPincode"
-                value={editData.address.pincode}
-                onChange={handleChange}
-                style={{ padding: '5px', width: '100%' }}
-              />
+          <p style={fieldStyle}><strong> Pincode: </strong></p>
+          {editData ? (
+            <input
+              type="text"
+              name="pincode"
+              value={editData.address.pincode}
+              onChange={handleAddressChange}
+              style={{ padding: '5px', width: '100%' }}
+            />
+            ) : (
+              <p>{enquiry.address.pincode}</p>
+            )
+          }
 
-              <p style={fieldStyle}><strong>Country:</strong></p>
-              <input
-                type="text"
-                name="addressCountry"
-                value={editData.address.country}
-                onChange={handleChange}
-                style={{ padding: '5px', width: '100%' }}
-              />
-            </>
-          ) : (
-            <>
-              {enquiry.address ? (
-                <>
-                  <p style={fieldStyle}><strong>Street:</strong> {enquiry.address.street}</p>
-                  <p style={fieldStyle}><strong>City:</strong> {enquiry.address.city}</p>
-                  <p style={fieldStyle}><strong>State:</strong> {enquiry.address.state}</p>
-                  <p style={fieldStyle}><strong>Pincode:</strong> {enquiry.address.pincode}</p>
-                  <p style={fieldStyle}><strong>Country:</strong> {enquiry.address.country}</p>
-                </>
-              ) : (
-                <p style={fieldStyle}>No Address Provided</p>
-              )}
-            </>
-          )}
+          <p style={fieldStyle}><strong> Country: </strong></p>
+          {editData ? (
+            <input
+              type="text"
+              name="country"
+              value={editData.address.country}
+              onChange={handleAddressChange}
+              style={{ padding: '5px', width: '100%' }}
+            />
+            ) : (
+              <p>{enquiry.address.country}</p>
+            )
+          }
+
         </div>
       </div>
 
