@@ -419,6 +419,21 @@ export default function EnquiryDetailPage() {
     }
   };
 
+
+  const handleCheckBox = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = event.target;
+  
+    setEditData((prevData) => {
+      if (!prevData) return null; // Ensure prevData isn't null
+      return {
+        ...prevData,
+        [name]: checked, // Update only the targeted field
+      };
+    });
+  };
+  
+  
+
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
   
@@ -671,7 +686,7 @@ export default function EnquiryDetailPage() {
               type="checkbox"
               name="wantHostel"
               checked={editData.wantHostel}
-              onChange={handleChange}
+              onChange={handleCheckBox}
               style={{ marginTop: '5px' }}
             />
           ) : (
@@ -684,7 +699,7 @@ export default function EnquiryDetailPage() {
               type="checkbox"
               name="wantTransport"
               checked={editData.wantTransport}
-              onChange={handleChange}
+              onChange={handleCheckBox}
               style={{ marginTop: '5px' }}
             />
           ) : (
