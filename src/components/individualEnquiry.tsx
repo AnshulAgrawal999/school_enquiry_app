@@ -489,6 +489,7 @@ export default function EnquiryDetailPage() {
 
   return (
     <div style={containerStyle}>
+
       <h1 style={headerStyle}>
         Enquiry Details
         <button
@@ -801,10 +802,16 @@ export default function EnquiryDetailPage() {
           }
 
         </div>
+
+        <button
+          onClick={handleSave}
+          style={{ padding: '10px', cursor: 'pointer' , margin : 'auto' }}
+          disabled={isSaving}
+        >
+          {isSaving ? 'Saving...' : 'Save Changes'}
+        </button>
+        
       </div>
-
-
-
     </div>
   );
   
