@@ -6,7 +6,6 @@ interface FilterProps {
   page: number;
   state: string;
   enquirySource: string;
-  wantHostel: any ;
   searchedName: string;
   sort: string;
   nameSort: string;
@@ -23,7 +22,6 @@ const StudentFilter: React.FC<StudentFilterProps> = ({ onFilter }) => {
     page: 1,
     state: "",
     enquirySource: "",
-    wantHostel : null ,
     searchedName: "",
     sort: "",
     nameSort: "",
@@ -84,19 +82,7 @@ const StudentFilter: React.FC<StudentFilterProps> = ({ onFilter }) => {
           <option value="referral">Referral</option>
         </select>
       </div>
-      <div className="filter-group">
-        <label htmlFor="wantHostel">
-          <input
-            type="checkbox"
-            id="wantHostel"
-            name="wantHostel"
-            checked={filters.wantHostel}
-            onChange={handleChange}
-            aria-label="Filter by hostel preference"
-          />
-          Want Hostel
-        </label>
-      </div>
+     
       <div className="filter-group">
         <label htmlFor="searchedName">Search Name:</label>
         <input

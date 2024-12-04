@@ -65,7 +65,6 @@ const EnquiriesTable: React.FC<{ initialFilters?: Record<string, any> }> = ({
       page: parseInt(params.get('page') || '1', 10),
       state: params.get('state') || '',
       enquirySource: params.get('enquirySource') || '',
-      wantHostel: params.get('wantHostel') ,
       searchedName: params.get('searchedName') || '',
       sort: params.get('sort') || '',
       nameSort: params.get('nameSort') || '',
