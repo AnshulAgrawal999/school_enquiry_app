@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import './StudentFilter.css';
+
 // Define types for filter values
 interface FilterProps {
   limit: number;
