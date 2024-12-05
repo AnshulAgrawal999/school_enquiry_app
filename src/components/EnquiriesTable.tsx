@@ -181,7 +181,7 @@ const EnquiriesTable: React.FC<{ initialFilters?: Record<string, any> }> = ({
             <tbody>
 
               { 
-                <p> No Enquries Found </p>
+                <p> No Student Enquiries Found </p>
               }
 
               {enquiries.map((enquiry: Enquiry, index: number) => (
