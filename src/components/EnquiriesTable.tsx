@@ -210,6 +210,7 @@ const EnquiriesTable: React.FC<{ initialFilters?: Record<string, any> }> = ({
                     {enquiry.createdAt ? new Date(enquiry.createdAt).toLocaleString() : 'Not Available'}
                   </td>
                   <td style={tdStyle}>
+
                     <button
                       style={deleteButtonStyle}
                       onClick={(e) => {
@@ -218,6 +219,11 @@ const EnquiriesTable: React.FC<{ initialFilters?: Record<string, any> }> = ({
                       }} >
                       Delete
                     </button>
+
+                    <button style={buttonStyle} >
+                      View more
+                    </button>
+
                   </td>
                 </tr>
               ))}
