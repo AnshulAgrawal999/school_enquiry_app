@@ -218,7 +218,7 @@ const EnquiriesTable: React.FC<{ initialFilters?: Record<string, any> }> = ({
                     </button>
 
                     <button style={buttonStyle} >
-                      View more
+                      ...
                     </button>
 
                   </td>
