@@ -179,6 +179,11 @@ const EnquiriesTable: React.FC<{ initialFilters?: Record<string, any> }> = ({
             </thead>
             
             <tbody>
+
+              { 
+                <p> No Enquries Found </p>
+              }
+
               {enquiries.map((enquiry: Enquiry, index: number) => (
                 <tr
                   key={enquiry._id}
