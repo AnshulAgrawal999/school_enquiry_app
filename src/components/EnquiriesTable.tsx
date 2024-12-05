@@ -18,6 +18,7 @@ import {
   deleteButtonStyle,
   paginationStyle,
   pageIndicatorStyle,
+  viewButtonStyle,
 } from './EnquiriesTable.css';
 
 type Enquiry = {
@@ -230,24 +231,39 @@ const EnquiriesTable: React.FC<{ initialFilters?: Record<string, any> }> = ({
           </table>
 
           <div style={paginationStyle}>
+            
             <button
               style={{ ...buttonStyle, marginRight: '10px' }}
               onClick={() => handlePageChange(Math.max(filters.page - 1, 1))}
-              disabled={filters.page === 1}
-            >
+              disabled={filters.page === 1} >
               Previous
             </button>
+
             <span style={pageIndicatorStyle}>
               Page {pagination.currentPage} of {pagination.totalPages}
             </span>
+
+
+            <select
+              style={{ ...viewButtonStyle, marginLeft: '10px', padding: '5px' }}
+              value={filters.page}
+              onChange={(e) => handlePageChange(parseInt(e.target.value, 10))} >
+              {Array.from({ length: pagination.totalPages }, (_, index) => (
+                <option key={index} value={index + 1}>
+                  Page {index + 1}
+                </option>
+              ))}
+            </select>
+
             <button
               style={{ ...buttonStyle, marginLeft: '10px' }}
               onClick={() => handlePageChange(Math.min(filters.page + 1, pagination.totalPages))}
-              disabled={filters.page === pagination.totalPages}
-            >
+              disabled={filters.page === pagination.totalPages} >
               Next
             </button>
+
           </div>
+
         </>
       )}
     </div>
