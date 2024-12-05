@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useQuery } from 'react-query';
+import { useQuery , useQueryClient } from 'react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
 import StudentFilter from '@/components/StudentFilter';
 
@@ -55,6 +55,8 @@ const EnquiriesTable: React.FC<{ initialFilters?: Record<string, any> }> = ({
   const router = useRouter();
 
   const searchParams = useSearchParams();
+
+  const queryClient = useQueryClient();
 
 
   // Initialize filters from URL or defaults
@@ -123,6 +125,29 @@ const EnquiriesTable: React.FC<{ initialFilters?: Record<string, any> }> = ({
     router.replace(`?${query}`);
   };
 
+  const handleDelete = async (id: string) => {
+    if (confirm("Are you sure you want to delete this enquiry?")) {
+      try {
+        await axios.delete(`http://localhost:4000/admin/${id}`);
+        alert("Enquiry deleted successfully.");
+        
+        // Update the React Query cache
+      queryClient.setQueryData(['enquiries', filters], (oldData: any) => {
+        if (!oldData) return;
+        return {
+          ...oldData,
+          enquiryFormsData: oldData.enquiryFormsData.filter((enquiry: Enquiry) => enquiry._id !== id),
+        };
+      });
+
+      } catch (error) {
+        console.error("Failed to delete enquiry:", error);
+        alert("Error deleting enquiry. Please try again.");
+      }
+    }
+  };
+  
+
   return (
     <div>
       <h1 style={headerStyle}>Enquiries Table</h1>
@@ -185,7 +210,14 @@ const EnquiriesTable: React.FC<{ initialFilters?: Record<string, any> }> = ({
                     {enquiry.createdAt ? new Date(enquiry.createdAt).toLocaleString() : 'Not Available'}
                   </td>
                   <td style={tdStyle}>
-                    {/* Actions */}
+                    <button
+                      style={deleteButtonStyle}
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent triggering row click event
+                        handleDelete(enquiry._id);
+                      }} >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}
