@@ -3,6 +3,7 @@
 
 import localFont from "next/font/local";
 import "./globals.css";
+
 import { QueryClient, QueryClientProvider } from "react-query";
 import { useState } from "react";
 
@@ -34,7 +35,7 @@ export default function RootLayout({
         <QueryClientProvider client={queryClient}>
           {children}
         </QueryClientProvider>
-        
+
       </body>
     </html>
   );
