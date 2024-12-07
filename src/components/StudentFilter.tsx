@@ -14,9 +14,6 @@ interface FilterProps {
   nameSort: string;
 }
 
-// Define types for props
-
-
 const StudentFilter: React.FC<any> = ({ onFilter, currentFilters }) => {
   const initialFilters: FilterProps = {
     limit: 10,
@@ -87,9 +84,8 @@ const StudentFilter: React.FC<any> = ({ onFilter, currentFilters }) => {
           <option value="referral">Referral</option>
         </select>
       </div>
-     
       <div className="filter-group">
-        <label htmlFor="searchedName">Search Name:</label>
+        <label htmlFor="searchedName">Search Student Name:</label>
         <input
           type="text"
           id="searchedName"
@@ -100,7 +96,7 @@ const StudentFilter: React.FC<any> = ({ onFilter, currentFilters }) => {
         />
       </div>
       <div className="filter-group">
-        <label htmlFor="sort">Sort By:</label>
+        <label htmlFor="sort">Sort By Created At:</label>
         <select
           id="sort"
           name="sort"
@@ -125,6 +121,22 @@ const StudentFilter: React.FC<any> = ({ onFilter, currentFilters }) => {
           <option value="">None</option>
           <option value="asc">A-Z</option>
           <option value="desc">Z-A</option>
+        </select>
+      </div>
+      <div className="filter-group">
+        <label htmlFor="limit">Page Limit:</label>
+        <select
+          id="limit"
+          name="limit"
+          value={filters.limit}
+          onChange={handleChange}
+          aria-label="Select the number of students per page"
+        >
+          <option value={5}>5</option>
+          <option value={10}>10</option>
+          <option value={15}>15</option>
+          <option value={20}>20</option>
+          <option value={25}>25</option>
         </select>
       </div>
       <div className="filter-group">
