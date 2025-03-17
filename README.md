@@ -26,7 +26,7 @@ This is an **Enquiry Management System** designed to streamline the process of h
 
 ## Tech Stack
 - **Frontend:** Next.js, Chakra UI, React Query  
-- **Backend:** Node.js  
+- **Backend:** Nest.js  
 - **Database:** MongoDB  
 
 ## Prerequisites
