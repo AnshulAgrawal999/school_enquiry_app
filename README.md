@@ -99,3 +99,4 @@ For questions or feedback, feel free to reach out to [Anshul Agrawal](https://gi
 
 ### Notes:
 - **Environment Variables:** You might need to adjust the `.env.local` variables based on your app’s specific requirements (e.g., authentication setup with NextAuth or API keys).
+
