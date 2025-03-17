@@ -23,9 +23,6 @@ This is an **Enquiry Management System** designed to streamline the process of h
 - **Add/Edit Enquiry:** Admins can update or add details to enquiries as needed.
 - **Remarks and Comments:** Add notes with author, timestamp, and visibility settings (e.g., private or internal).
 
-## Screenshots
-Here are some visual representations of the application:
-
 ### Admin Dashboard
 ![Admin Dashboard](public/Images/Screenshot%20(719).png)
 - Displays the total number of student enquiries (e.g., 120).
