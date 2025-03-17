@@ -1,4 +1,3 @@
-
 # School Enquiry App
 
 This is an **Enquiry Management System** designed to streamline the process of handling prospective student enquiries for school admissions. It provides an intuitive user panel for parents or guardians to submit enquiries and a robust admin panel for admissions staff to manage and follow up on them efficiently.
@@ -23,6 +22,33 @@ This is an **Enquiry Management System** designed to streamline the process of h
   - Enquiry timeline showing submission date, follow-ups, and status updates.
 - **Add/Edit Enquiry:** Admins can update or add details to enquiries as needed.
 - **Remarks and Comments:** Add notes with author, timestamp, and visibility settings (e.g., private or internal).
+
+## Screenshots
+Here are some visual representations of the application:
+
+### Admin Dashboard
+![Admin Dashboard](screenshots/admin_dashboard.png)
+- Displays the total number of student enquiries (e.g., 120).
+
+### Enquiries Table
+![Enquiries Table](screenshots/enquiries_table.png)
+- Shows a table with filters, search, and pagination options for managing enquiries.
+
+### Admin Login
+![Admin Login](screenshots/admin_login.png)
+- Secure login page for admin access.
+
+### Address Edit
+![Address Edit](screenshots/address_edit.png)
+- Interface for editing student address details and adding admin remarks.
+
+### Enquiry Details
+![Enquiry Details](screenshots/enquiry_details.png)
+- Detailed view of a specific enquiry, including student and guardian information.
+
+### Full Enquiries Table
+![Full Enquiries Table](screenshots/full_enquiries_table.png)
+- Expanded view of the enquiries table with multiple entries.
 
 ## Tech Stack
 - **Frontend:** Next.js, Chakra UI, React Query  
@@ -66,7 +92,6 @@ Before setting up the project, ensure you have the following installed:
 - **User Panel:** Navigate to the enquiry submission form to submit a new enquiry without logging in.
 - **Admin Panel:** Log in with admin credentials to access the dashboard and manage enquiries.
 
-
 ## Contact
 For questions or feedback, feel free to reach out to [Anshul Agrawal](https://github.com/AnshulAgrawal999) or open an issue on this repository.
 
@@ -74,4 +99,3 @@ For questions or feedback, feel free to reach out to [Anshul Agrawal](https://gi
 
 ### Notes:
 - **Environment Variables:** You might need to adjust the `.env.local` variables based on your app’s specific requirements (e.g., authentication setup with NextAuth or API keys).
-
