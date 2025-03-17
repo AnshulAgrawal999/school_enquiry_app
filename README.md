@@ -26,7 +26,7 @@ This is an **Enquiry Management System** designed to streamline the process of h
 
 ## Tech Stack
 - **Frontend:** Next.js, Chakra UI, React Query  
-- **Backend:** Nest.js  
+- **Backend:** Nest.js (https://github.com/AnshulAgrawal999/school_enquiry_backend)
 - **Database:** MongoDB  
 
 ## Prerequisites
